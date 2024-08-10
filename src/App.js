@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 
 function App() {
-  const [message, setMessage] = useState('');
+  const [devices, setDevices] = useState([]);
 
-  const sendMessage = async () => {
+  const listDevices = async () => {
     try {
-      const response = await fetch(`/send?message=${message}`);
-      const result = await response.text();
-      console.log(result);
+      const response = await fetch('/list-ports');
+      const data = await response.json();
+      setDevices(data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error fetching devices:', error);
     }
   };
 
   return (
     <div>
       <h1>Arduino Serial Communication</h1>
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Enter message"
-      />
-      <button onClick={sendMessage}>Send to Arduino</button>
+      <button onClick={listDevices}>List Available Devices</button>
+      <ul>
+        {devices.map((device, index) => (
+          <li key={index}>
+            {device.path} - {device.manufacturer || 'Unknown'}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

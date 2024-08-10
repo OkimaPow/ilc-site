@@ -3,28 +3,17 @@ const SerialPort = require('serialport');
 const app = express();
 const port = 3001;
 
-// Adjust the serial port path and baud rate according to your Arduino setup
-const serialPort = new SerialPort('/dev/ttyUSB0', {
-  baudRate: 9600,
+// List available serial ports
+app.get('/list-ports', async (req, res) => {
+  try {
+    const ports = await SerialPort.list();
+    res.json(ports);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-serialPort.on('open', () => {
-  console.log('Serial port opened');
-});
-
-serialPort.on('data', (data) => {
-  console.log('Received data from Arduino:', data.toString());
-});
-
-app.get('/send', (req, res) => {
-  const message = req.query.message;
-  serialPort.write(message, (err) => {
-    if (err) {
-      return res.status(500).send('Error writing to serial port');
-    }
-    res.send('Message sent to Arduino');
-  });
-});
+// Other routes and serial communication code...
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
