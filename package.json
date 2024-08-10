@@ -3,7 +3,8 @@
   "name": "ilc-site",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://yourusername.github.io/serial-communication",
+  "homepage": "https://OkimaPow.github.io/ilc-site",
+  "proxy": "http://localhost:3001",
 
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
