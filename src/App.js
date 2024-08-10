@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [message, setMessage] = useState('');
+
+  const sendMessage = async () => {
+    try {
+      const response = await fetch(`/send?message=${message}`);
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Arduino Serial Communication</h1>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Enter message"
+      />
+      <button onClick={sendMessage}>Send to Arduino</button>
     </div>
   );
 }
